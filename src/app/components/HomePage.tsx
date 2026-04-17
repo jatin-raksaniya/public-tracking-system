@@ -1,4 +1,4 @@
-import { ArrowRight, Users, DollarSign, ShieldAlert, EyeOff, FileText, Vote, CheckCircle, Search, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Users, ShieldAlert, EyeOff, FileText, Vote, Search, ShieldCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useAppContext } from '../context/AppContext';
@@ -10,11 +10,17 @@ interface HomePageProps {
 export function HomePage({ onNavigate }: HomePageProps) {
   const { projects } = useAppContext();
   
-  const activeProjects = projects.filter(p => p.status === 'in-progress' || p.status === 'tendering').length;
-  const totalFunds = projects.reduce((sum, p) => sum + p.budget, 0);
-  const totalVotes = projects.reduce((sum, p) => {
-    const predefinedVotes = p.isProposed ? p.predefinedIssues?.reduce((s, i) => s + i.votes, 0) || 0 : 0;
-    return sum + (p.votes || 0) + predefinedVotes;
+  const safeProjects = Array.isArray(projects) ? projects : [];
+  
+  const activeProjects = safeProjects.filter(p => p && (p.status === 'in-progress' || p.status === 'tendering')).length;
+  const totalFunds = safeProjects.reduce((sum, p) => sum + (typeof p?.budget === 'number' ? p.budget : 0), 0);
+  const totalVotes = safeProjects.reduce((sum, p) => {
+    if (!p) return sum;
+    let predefinedVotes = 0;
+    if (p.isProposed && Array.isArray(p.predefinedIssues)) {
+      predefinedVotes = p.predefinedIssues.reduce((s, i) => s + (typeof i?.votes === 'number' ? i.votes : 0), 0);
+    }
+    return sum + (typeof p.votes === 'number' ? p.votes : 0) + predefinedVotes;
   }, 0);
 
   return (
@@ -158,11 +164,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Active Deployments</div>
               </div>
               <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center">
-                <div className="text-4xl font-black text-emerald-600 mb-2">₹{(totalFunds / 10000000).toFixed(1)}Cr</div>
+                <div className="text-4xl font-black text-emerald-600 mb-2">₹{(isNaN(+totalFunds) ? 0 : (totalFunds / 10000000)).toFixed(1)}Cr</div>
                 <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Vetted Funds</div>
               </div>
               <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center col-span-2">
-                <div className="text-4xl font-black text-indigo-600 mb-2">{totalVotes.toLocaleString()}+</div>
+                <div className="text-4xl font-black text-indigo-600 mb-2">{isNaN(+totalVotes) ? 0 : totalVotes.toLocaleString()}+</div>
                 <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Civic Feedback Data Points</div>
               </div>
             </div>
