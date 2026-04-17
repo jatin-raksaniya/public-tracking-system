@@ -96,6 +96,12 @@ This triggers the strict TypeScript compiler (`tsc -b`) followed by Vite's produ
 
 ---
 
+**SPECIAL THANKS TO MY PROJECT PARTNERS**
+*ANKIT*
+*AYUSH*
+*ASHMIT*
+*IRFAN*
+
 ## 🤝 Contributing
 Contributions make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
