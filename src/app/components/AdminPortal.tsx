@@ -30,7 +30,9 @@ export function AdminPortal() {
       completionPercentage: 0,
       location: {
         lat: 28.5, lng: 77.4, address: projectData.location
-      }
+      },
+      predefinedIssues: [],
+      citizenSuggestions: []
     });
   };
 
