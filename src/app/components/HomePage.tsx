@@ -2,6 +2,7 @@ import { ArrowRight, Users, ShieldAlert, EyeOff, FileText, Vote, Search, ShieldC
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useAppContext } from '../context/AppContext';
+import BorderGlow from './BorderGlow';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -66,21 +67,44 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="p-8 border-t-4 border-t-red-500 bg-white/60 backdrop-blur hover:shadow-xl transition-all">
-            <EyeOff className="h-10 w-10 text-red-500 mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Zero Transparency</h3>
-            <p className="text-gray-600">Citizens are kept in the dark regarding timelines and astronomical budgets. Information is scattered and inaccessible.</p>
-          </Card>
-          <Card className="p-8 border-t-4 border-t-orange-500 bg-white/60 backdrop-blur hover:shadow-xl transition-all">
-            <ShieldAlert className="h-10 w-10 text-orange-500 mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">High Corruption Risks</h3>
-            <p className="text-gray-600">Without public oversight and transparent tendering, accountability vanishes and project costs artificially bloat.</p>
-          </Card>
-          <Card className="p-8 border-t-4 border-t-gray-500 bg-white/60 backdrop-blur hover:shadow-xl transition-all">
-            <Users className="h-10 w-10 text-gray-500 mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No Public Voice</h3>
-            <p className="text-gray-600">The primary consumers of the newly built infrastructure don't have a structured way to voice actual needs.</p>
-          </Card>
+          <BorderGlow 
+            glowColor="0 90 60" 
+            backgroundColor="rgba(255, 255, 255, 0.9)"
+            animated={true}
+            className="h-full"
+          >
+            <div className="p-8 h-full flex flex-col">
+              <EyeOff className="h-10 w-10 text-red-500 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Zero Transparency</h3>
+              <p className="text-gray-600">Citizens are kept in the dark regarding timelines and astronomical budgets. Information is scattered and inaccessible.</p>
+            </div>
+          </BorderGlow>
+
+          <BorderGlow 
+            glowColor="30 95 55" 
+            backgroundColor="rgba(255, 255, 255, 0.9)"
+            animated={true}
+            className="h-full"
+          >
+            <div className="p-8 h-full flex flex-col">
+              <ShieldAlert className="h-10 w-10 text-orange-500 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">High Corruption Risks</h3>
+              <p className="text-gray-600">Without public oversight and transparent tendering, accountability vanishes and project costs artificially bloat.</p>
+            </div>
+          </BorderGlow>
+
+          <BorderGlow 
+            glowColor="210 20 60" 
+            backgroundColor="rgba(255, 255, 255, 0.9)"
+            animated={true}
+            className="h-full"
+          >
+            <div className="p-8 h-full flex flex-col">
+              <Users className="h-10 w-10 text-gray-500 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">No Public Voice</h3>
+              <p className="text-gray-600">The primary consumers of the newly built infrastructure don't have a structured way to voice actual needs.</p>
+            </div>
+          </BorderGlow>
         </div>
       </section>
 
