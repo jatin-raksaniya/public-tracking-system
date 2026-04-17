@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useAppContext } from '../context/AppContext';
 import BorderGlow from './BorderGlow';
+import ShapeGrid from './ShapeGrid';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -27,14 +28,27 @@ export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="space-y-24 pb-16">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-24 overflow-hidden">
-        {/* Background Decorative Blur */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+      <section className="relative pt-20 pb-24 overflow-hidden min-h-[600px] flex items-center">
+        {/* Interactive Math/Grid Background */}
+        <div className="absolute inset-0 z-0 opacity-60">
+          <ShapeGrid 
+            direction="diagonal" 
+            speed={0.5} 
+            squareSize={50} 
+            borderColor="#e2e8f0" 
+            hoverFillColor="#bfdbfe" 
+            shape="hexagon" 
+            hoverTrailAmount={5} 
+          />
+        </div>
+        
+        {/* Background Decorative Blur layer (soft overlay) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 pointer-events-none">
           <div className="absolute top-[10%] left-[20%] w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
           <div className="absolute top-[20%] right-[20%] w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
 
-        <div className="max-w-4xl mx-auto text-center px-4">
+        <div className="max-w-4xl mx-auto text-center px-4 relative z-10">
           <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-semibold tracking-wide mb-6">
             A New Era of Civic Transparency
           </div>
