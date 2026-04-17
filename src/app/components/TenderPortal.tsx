@@ -4,13 +4,14 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
-import { mockTenders } from '../data/mockData';
+import { useAppContext } from '../context/AppContext';
 
 export function TenderPortal() {
+  const { tenders } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTender, setSelectedTender] = useState<string | null>(null);
 
-  const filteredTenders = mockTenders.filter(tender => 
+  const filteredTenders = tenders.filter(tender => 
     tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     tender.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -61,7 +62,7 @@ export function TenderPortal() {
         <Card className="p-6">
           <p className="text-sm text-gray-600 mb-1">Total Value</p>
           <p className="text-gray-900">
-            ₹{(openTenders.reduce((sum, t) => sum + t.maxBudget, 0) / 1000000).toFixed(2)}M
+            ₹{(openTenders.reduce((sum, t) => sum + t.maxBudget, 0) / 100000).toFixed(2)} Lakhs
           </p>
         </Card>
         <Card className="p-6">
@@ -180,9 +181,6 @@ export function TenderPortal() {
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   {isSelected ? 'Hide Details' : 'View Details'}
-                </Button>
-                <Button>
-                  Submit Bid
                 </Button>
               </div>
             </Card>

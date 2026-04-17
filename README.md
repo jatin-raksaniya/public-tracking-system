@@ -2,9 +2,19 @@
 
 > **Civic Chain**: A modern civic engagement platform built with cutting-edge web technologies for transparency, performance, and community-driven project tracking.
 
-## 📋 Overview
+## 📋 Background & Problem Statement
 
-**Public Tracking System** (formerly Civic Chain) is a role-based, transparent platform designed to track the flow of public money from vote to pavement. Through distinct portals tailored for Citizens, Contractors, and Administrators, the platform facilitates a seamless lifecycle for community projects—from initial wish-lists and proposals, to competitive bidding, to final milestone tracking and escrow payments. 
+When government development happens around us—like building a road in a city or local neighborhood—the main issue isn't *what* is developing, but *how* it's happening. The local residents / main consumers of these services rarely contribute, give suggestions, or even know about the details of projects being built with their tax money. 
+
+Current issues include:
+- **Lack of Transparency**: Citizens are kept in the dark regarding budgets and timelines.
+- **High Chance of Corruption**: Without public oversight, tracking where funds go is difficult.
+- **No Public Contributions**: The actual consumers of the projects have no mechanism to voice their needs or vote on priorities.
+- **Lack of Information**: General unavailability of actionable data regarding active public developments.
+
+## 💡 Our Solution
+
+**Public Tracking System** bridges the gap between local citizens, contractors, and administrators. It introduces a cohesive system to solve these problems by tracking the flow of public money from *vote* to *pavement*. Through distinct portals and dynamic workflows, the platform facilitates a seamless lifecycle for community projects—from initial wish-lists and proposals, to competitive bidding, to final milestone tracking and escrow payments. 
 
 Built on a robust, modern stack leveraging **React 18**, **TypeScript**, **Tailwind CSS**, and **shadcn/ui**, it places high emphasis on responsive design, accessibility, and modern data visualization techniques.
 

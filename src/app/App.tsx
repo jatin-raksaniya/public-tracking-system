@@ -10,10 +10,12 @@ import { ContractorWorkPortal } from './components/ContractorWorkPortal';
 import { AdminPortal } from './components/AdminPortal';
 import { LoginModal } from './components/LoginModal';
 import { Chatbot } from './components/Chatbot';
-import { Menu, LogOut, User } from 'lucide-react';
+import { Menu, LogOut, User, Bell } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './components/ui/sheet';
 import { Badge } from './components/ui/badge';
+import { useAppContext } from './context/AppContext';
+import { Popover, PopoverContent, PopoverTrigger } from './components/ui/popover';
 
 export type UserRole = 'citizen' | 'contractor' | 'admin';
 
@@ -26,6 +28,8 @@ export default function App() {
   });
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginRole, setLoginRole] = useState<'admin' | 'contractor'>('contractor');
+  
+  const { notifications, markNotificationRead } = useAppContext();
 
   const handleLogin = (username: string, password: string, role: 'admin' | 'contractor') => {
     setIsAuthenticated((prev) => ({ ...prev, [role]: true }));
@@ -184,6 +188,8 @@ export default function App() {
     </nav>
   );
 
+  const unreadCount = notifications.filter(n => !n.read).length;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -209,6 +215,45 @@ export default function App() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {userRole === 'citizen' && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="sm" className="relative">
+                    <Bell className="h-5 w-5 text-gray-600" />
+                    {unreadCount > 0 && (
+                      <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-0" align="end">
+                  <div className="p-4 border-b">
+                    <h3 className="font-semibold">Notifications</h3>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-4 text-center text-gray-500 text-sm">No notifications yet</div>
+                    ) : (
+                      notifications.map((notif) => (
+                        <div 
+                          key={notif.id} 
+                          className={`p-4 border-b hover:bg-gray-50 cursor-pointer ${notif.read ? 'opacity-70' : 'bg-blue-50/50'}`}
+                          onClick={() => markNotificationRead(notif.id)}
+                        >
+                          <div className="flex justify-between items-start mb-1">
+                            <span className="font-medium text-sm text-gray-900">{notif.title}</span>
+                            {!notif.read && <span className="h-2 w-2 bg-blue-600 rounded-full mt-1.5" />}
+                          </div>
+                          <p className="text-sm text-gray-600">{notif.message}</p>
+                          <p className="text-xs text-gray-400 mt-2">{new Date(notif.date).toLocaleString()}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
             <select
               value={userRole}
               onChange={(e) => handleRoleChange(e.target.value as UserRole)}
