@@ -5,17 +5,19 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Textarea } from './ui/textarea';
 import { Progress } from './ui/progress';
-import { mockProjects } from '../data/mockData';
+import { useAppContext } from '../context/AppContext';
 
 export function ContractorWorkPortal() {
-  const [selectedProject, setSelectedProject] = useState(mockProjects[0]?.id || '');
+  const { projects } = useAppContext();
+  const contractorProjects = projects.filter(p => !p.isProposed && p.status === 'in-progress');
+  
+  const [selectedProject, setSelectedProject] = useState(contractorProjects[0]?.id || '');
   const [selectedMilestone, setSelectedMilestone] = useState<string | null>(null);
   const [uploadNotes, setUploadNotes] = useState('');
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
 
-  const project = mockProjects.find(p => p.id === selectedProject);
-  const contractorProjects = mockProjects.filter(p => p.contractor);
+  const project = projects.find(p => p.id === selectedProject);
 
   const handlePhotoUpload = () => {
     // Simulate photo upload
@@ -59,6 +61,24 @@ export function ContractorWorkPortal() {
     return status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
 
+  if (contractorProjects.length === 0) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-gray-900 mb-2">My Projects</h1>
+          <p className="text-gray-600">
+            Upload milestone progress and track payments
+          </p>
+        </div>
+        <Card className="p-12 text-center">
+           <AlertCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+           <p className="text-gray-500">You currently have no active projects assigned to you.</p>
+           <p className="text-sm text-gray-400 mt-2">Win a tender to start seeing your active projects here.</p>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <div>
@@ -71,7 +91,7 @@ export function ContractorWorkPortal() {
       {/* Project Selection */}
       <Card className="p-6">
         <label htmlFor="contractor-project-select" className="text-sm text-gray-600 mb-2 block">
-          Select Your Project
+          Select Your Assigned Project
         </label>
         <select
           id="contractor-project-select"
@@ -126,7 +146,7 @@ export function ContractorWorkPortal() {
           </Card>
 
           {/* Milestones */}
-          {project.milestones && project.milestones.length > 0 && (
+          {project.milestones && project.milestones.length > 0 ? (
             <div>
               <h2 className="text-gray-900 mb-4">Project Milestones</h2>
               
@@ -217,6 +237,10 @@ export function ContractorWorkPortal() {
                   </Card>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="py-6 text-center text-gray-500">
+               No milestones mapped for this project yet.
             </div>
           )}
 
@@ -319,25 +343,27 @@ export function ContractorWorkPortal() {
           )}
 
           {/* Payment Tracker */}
-          <Card className="p-6 bg-gray-50">
-            <h3 className="text-gray-900 mb-4">Payment Tracker</h3>
-            <div className="space-y-3">
-              {project.milestones?.map((milestone) => (
-                <div key={milestone.id} className="flex items-center justify-between p-3 bg-white rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <DollarSign className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-sm text-gray-900">{milestone.title}</p>
-                      <p className="text-xs text-gray-600">₹{milestone.paymentAmount.toLocaleString()}</p>
+          {project.milestones && project.milestones.length > 0 && (
+            <Card className="p-6 bg-gray-50">
+              <h3 className="text-gray-900 mb-4">Payment Tracker</h3>
+              <div className="space-y-3">
+                {project.milestones.map((milestone) => (
+                  <div key={milestone.id} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <DollarSign className="h-5 w-5 text-gray-400" />
+                      <div>
+                        <p className="text-sm text-gray-900">{milestone.title}</p>
+                        <p className="text-xs text-gray-600">₹{milestone.paymentAmount.toLocaleString()}</p>
+                      </div>
                     </div>
+                    <Badge className={milestone.paymentReleased ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
+                      {milestone.paymentReleased ? 'Paid' : 'Pending'}
+                    </Badge>
                   </div>
-                  <Badge className={milestone.paymentReleased ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}>
-                    {milestone.paymentReleased ? 'Paid' : 'Pending'}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </Card>
+                ))}
+              </div>
+            </Card>
+          )}
         </>
       )}
     </div>

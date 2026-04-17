@@ -3,10 +3,8 @@ import { HomePage } from './components/HomePage';
 import { ProjectExplorer } from './components/ProjectExplorer';
 import { VoiceYourNeeds } from './components/VoiceYourNeeds';
 import { CommunityWishlist } from './components/CommunityWishlist';
-import { TenderPortal } from './components/TenderPortal';
-import { BiddingDashboard } from './components/BiddingDashboard';
+import { ContractorPortal } from './components/ContractorPortal';
 import { ProjectStatusDashboard } from './components/ProjectStatusDashboard';
-import { ContractorWorkPortal } from './components/ContractorWorkPortal';
 import { AdminPortal } from './components/AdminPortal';
 import { LoginModal } from './components/LoginModal';
 import { Chatbot } from './components/Chatbot';
@@ -58,7 +56,7 @@ export default function App() {
 
   const handleNavigate = (page: string) => {
     // Check if navigation requires authentication
-    const contractorPages = ['bidding', 'contractor-portal'];
+    const contractorPages = ['contractor-portal'];
     const adminPages = ['admin'];
 
     if (contractorPages.includes(page) && !isAuthenticated.contractor) {
@@ -86,14 +84,11 @@ export default function App() {
         return <VoiceYourNeeds />;
       case 'wishlist':
         return <CommunityWishlist />;
-      case 'tender-portal':
-        return <TenderPortal />;
-      case 'bidding':
-        return isAuthenticated.contractor ? <BiddingDashboard /> : <TenderPortal />;
       case 'project-status':
         return <ProjectStatusDashboard />;
       case 'contractor-portal':
-        return isAuthenticated.contractor ? <ContractorWorkPortal /> : <TenderPortal />;
+        // The ContractorPortal holds Open Tenders, Bidding, and My Projects tabs
+        return isAuthenticated.contractor ? <ContractorPortal /> : <HomePage onNavigate={handleNavigate} />;
       case 'admin':
         return isAuthenticated.admin ? <AdminPortal /> : <HomePage onNavigate={handleNavigate} />;
       default:
@@ -142,25 +137,11 @@ export default function App() {
       <div className="px-3 py-2">
         <p className="text-sm text-gray-500 mb-2">Contractor Portal</p>
         <Button
-          variant={currentPage === 'tender-portal' ? 'secondary' : 'ghost'}
-          className="w-full justify-start"
-          onClick={() => setCurrentPage('tender-portal')}
-        >
-          Open Tenders
-        </Button>
-        <Button
-          variant={currentPage === 'bidding' ? 'secondary' : 'ghost'}
-          className="w-full justify-start"
-          onClick={() => setCurrentPage('bidding')}
-        >
-          Submit Bid
-        </Button>
-        <Button
           variant={currentPage === 'contractor-portal' ? 'secondary' : 'ghost'}
           className="w-full justify-start"
           onClick={() => setCurrentPage('contractor-portal')}
         >
-          My Projects
+          Contractor Dashboard
         </Button>
       </div>
 
